@@ -136,7 +136,11 @@ void SensorSuelo::delaySensor(unsigned long ms){
 SensorSuelo::SensorSuelo(uint8_t id_sensor, int rx=2, int tx=3): sensor(rx,tx) 
 {
   this->id_sensor=id_sensor;
+#ifdef ESP32
+  this->sensor.begin(4800,EspSoftwareSerial::SWSERIAL_8N1);
+#else
   this->sensor.begin(4800);
+#endif
 }
 SensorSuelo::~SensorSuelo()
 {

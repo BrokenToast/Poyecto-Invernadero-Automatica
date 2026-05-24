@@ -1,6 +1,4 @@
-#ifndef Error_h
-#define Error_h
-#endif
+ 
 #include "SoftwareSerial.h"
 class Error{
     public:
