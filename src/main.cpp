@@ -1,5 +1,5 @@
 #include <Arduino.h>
-//#include "SensorSuelo.h"
+#include "SensorSuelo.h"
 #include "Datos.h"
 
 // Select your modem:
@@ -104,8 +104,7 @@ uint32_t lastReconnectAttempt = 0;
 //   mqtt.subscribe(topicLed);
 //   return mqtt.connected();
 // }
-
-
+Datos datos(19,18,1,23,22);
 void setup() {
   // Set console baud rate
   SerialMon.begin(115200);

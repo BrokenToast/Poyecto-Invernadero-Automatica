@@ -77,7 +77,7 @@ int Datos::getTemperaturaExterna(){
  * 
  * @return int 
  */
-int Datos::obtenerDatosSuelo(){
+void Datos::obtenerDatosSuelo(){
     this->nitrogeno=this->sensor_suelo.getNitrogeno();
     this->potasio=this->sensor_suelo.getPotasio();
     this->fosforo=this->sensor_suelo.getFosforo();

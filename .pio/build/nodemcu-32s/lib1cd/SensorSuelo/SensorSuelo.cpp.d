@@ -134,6 +134,4 @@
  /home/toast/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_hw_support/include/soc/esp32/spiram.h \
  /home/toast/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  /home/toast/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
- lib/espsoftwareserial/src/SoftwareSerial.h \
- .pio/libdeps/nodemcu-32s/ghostl/src/circular_queue.h \
- .pio/libdeps/nodemcu-32s/ghostl/src/Delegate.h
+ /home/toast/.platformio/packages/framework-arduinoespressif32/cores/esp32/HardwareSerial.h

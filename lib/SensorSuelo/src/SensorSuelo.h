@@ -3,7 +3,7 @@
 #define SENSORSUELO_H
 
 #include <Arduino.h>
-#include "SoftwareSerial.h"
+#include "HardwareSerial.h"
 
 /**
  * @brief Clase que nos permite leer y escribir en el sensor de suelo halisense NPK-T(Temperatura)-PH-C(Conductividad)-S(Salinidad)
@@ -17,7 +17,7 @@ private:
   const uint8_t leer=0x03;
   const uint8_t escribir=0x03;
 
-  SoftwareSerial sensor;
+  HardwareSerial sensor;
 
   /**
    * @brief Método que nos permite obtener un dato del sensor.
@@ -45,7 +45,7 @@ private:
    */
   void delaySensor(unsigned long ms);
 public:
-  SensorSuelo(uint8_t id_sensor, int rx=2, int tx=3);
+  SensorSuelo(uint8_t id_sensor, int rx_port, int tx_port);
   ~SensorSuelo();
   float getHumedad();
   float getTemperatura();

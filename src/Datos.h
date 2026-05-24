@@ -36,15 +36,15 @@ class Datos{
         sensor_suelo(id_sensor_suelo,rx_sensor_suelo, tx_sensor_suelo),
         datos_DTH_interno(datos_DTH_interno, DHT21),
         datos_DTH_externo(datos_DTH_externo, DHT21){};
-    int getNitrogeno(){};
-    int getPotasio(){};
-    int getFosforo(){};
-    int getSalinidad(){};
-    int getPh(){};
-    int getHumedadInterna(){};
-    int getHumedadExterna(){};
-    int getTemperaturaInterna(){};
-    int getTemperaturaExterna(){};
-    int obtenerDatosSuelo(){};
+    int getNitrogeno();
+    int getPotasio();
+    int getFosforo();
+    int getSalinidad();
+    int getPh();
+    int getHumedadInterna();
+    int getHumedadExterna();
+    int getTemperaturaInterna();
+    int getTemperaturaExterna();
+    void obtenerDatosSuelo();
 };
 
