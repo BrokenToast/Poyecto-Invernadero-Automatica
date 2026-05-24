@@ -151,6 +151,7 @@ void setup() {
 }
 
 void loop() {
+  Serial.printf("Temperaturas suelo %d Cº \n",datos.getTemperaturaSuelo());
   // Make sure we're still registered on the network
 //   if (!modem.isNetworkConnected()) {
 //     SerialMon.println("Network disconnected");
@@ -190,4 +191,5 @@ void loop() {
 //   }
 
 //   mqtt.loop();
+  delay(1000);
 }

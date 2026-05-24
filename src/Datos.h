@@ -12,8 +12,10 @@ class Datos{
     int salinidad;
     int humedad_interna;
     int humedad_externa;
+    int humedad_suelo;
     int temperatura_interna;
     int temperatura_externa;
+    int temperatura_suelo;
 
     DHT datos_DTH_interno;
     DHT datos_DTH_externo;
@@ -45,6 +47,8 @@ class Datos{
     int getHumedadExterna();
     int getTemperaturaInterna();
     int getTemperaturaExterna();
+    int getTemperaturaSuelo();
+    int getHumedadSuelo();
     void obtenerDatosSuelo();
 };
 

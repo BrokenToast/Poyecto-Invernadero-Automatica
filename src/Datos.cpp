@@ -73,6 +73,22 @@ int Datos::getTemperaturaExterna(){
     return this->temperatura_externa;
 }
 /**
+ * @brief Get the Temperatura Suelo object
+ * 
+ * @return int 
+ */
+int Datos::getTemperaturaSuelo(){
+    return this->temperatura_suelo;
+}
+/**
+ * @brief Get the Humedad Suelo object
+ * 
+ * @return int 
+ */
+int Datos::getHumedadSuelo(){
+    return this->humedad_suelo;
+}
+/**
  * @brief 
  * 
  * @return int 
@@ -83,6 +99,8 @@ void Datos::obtenerDatosSuelo(){
     this->fosforo=this->sensor_suelo.getFosforo();
     this->ph=this->sensor_suelo.getPh();
     this->salinidad=this->sensor_suelo.getSalinidad();
+    this->temperatura_suelo=this->sensor_suelo.getTemperatura();
+    this->humedad_suelo=this->sensor_suelo.getHumedad();
 
     this->humedad_interna=this->datos_DTH_interno.readHumidity();
     this->humedad_externa;this->datos_DTH_externo.readHumidity();
