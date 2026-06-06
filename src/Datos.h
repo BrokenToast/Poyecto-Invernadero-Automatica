@@ -12,10 +12,10 @@ class Datos{
     int salinidad;
     int humedad_interna;
     int humedad_externa;
-    int humedad_suelo;
+    float humedad_suelo;
     int temperatura_interna;
     int temperatura_externa;
-    int temperatura_suelo;
+    float temperatura_suelo;
 
     DHT datos_DTH_interno;
     DHT datos_DTH_externo;
@@ -37,18 +37,78 @@ class Datos{
         int datos_DTH_externo): 
         sensor_suelo(id_sensor_suelo,rx_sensor_suelo, tx_sensor_suelo),
         datos_DTH_interno(datos_DTH_interno, DHT21),
-        datos_DTH_externo(datos_DTH_externo, DHT21){};
+        datos_DTH_externo(datos_DTH_externo, DHT21){
+    };
+    /**
+     * @brief Get the Nitrogeno object
+     * 
+     * @return int 
+     */
     int getNitrogeno();
+    /**
+     * @brief Get the Potasio object
+     * 
+     * @return int 
+     */
     int getPotasio();
+    /**
+     * @brief Get the Fosforo object
+     * 
+     * @return int 
+     */
     int getFosforo();
+    /**
+     * @brief Get the Salinidad object
+     * 
+     * @return int 
+     */
     int getSalinidad();
+    /**
+     * @brief Get the Ph object
+     * 
+     * @return int 
+     */
     int getPh();
+    /**
+     * @brief Get the Humedad Interna object
+     * 
+     * @return int 
+     */
     int getHumedadInterna();
+    /**
+     * @brief Get the Humedad Externa object
+     * 
+     * @return int 
+     */
     int getHumedadExterna();
+    /**
+     * @brief Get the Temperatura Interna object
+     * 
+     * @return int 
+     */
     int getTemperaturaInterna();
+    /**
+     * @brief Get the Temperatura Externa object
+     * 
+     * @return int 
+     */
     int getTemperaturaExterna();
-    int getTemperaturaSuelo();
-    int getHumedadSuelo();
+    /**
+     * @brief Get the Temperatura Suelo object
+     * 
+     * @return float 
+     */
+    float getTemperaturaSuelo();
+    /**
+     * @brief Get the Humedad Suelo object
+     * 
+     * @return float 
+     */
+    float getHumedadSuelo();
+    /**
+     * @brief Nos permite obtener los datos de los diferentes sensores 
+     * 
+     */
     void obtenerDatosSuelo();
 };
 

@@ -5,10 +5,6 @@
 // Select your modem:
 #define TINY_GSM_MODEM_SIM800
 
-// Set serial for debug console (to the Serial Monitor, default speed 115200)
-#define SerialMon Serial
-
-#define SerialAT Serial2
 
 // Define the serial console for debug prints, if needed
 //#define TINY_GSM_DEBUG SerialMon
@@ -62,7 +58,7 @@ const char* info;
 #include <TinyGsmClient.h>
 #include <PubSubClient.h>
 
-TinyGsm        modem(SerialAT);
+TinyGsm        modem;
 TinyGsmClient client(modem);
 PubSubClient  mqtt(client);
 
@@ -85,26 +81,26 @@ uint32_t lastReconnectAttempt = 0;
 //   }
 // }
 
-// boolean mqttConnect() {
-//   SerialMon.print("Connecting to ");
-//   SerialMon.print(broker);
+boolean mqttConnect() {:
+  boolean status = mqtt.connect("GsmClientName", "mqtt_user", "mqtt_pass");
 
-//   // Connect to MQTT Broker
-//   boolean status = mqtt.connect("GsmClientTest");
+  return mqtt.connected();
+}
 
-//   // Or, if you want to authenticate MQTT:
-//   // boolean status = mqtt.connect("GsmClientName", "mqtt_user", "mqtt_pass");
+int mandarMQTT(char* topic, char* valor){
+  if (!mqtt.connected()){
+    for (int i = 0; i < 4; i++)
+    {
+      if (!mqttConnect())
+      {
+        // Error error al conectar a mqtt
+        break;
+      }
+    }
+    return mqtt.publish(topic, valor);
+  }
+}
 
-//   if (status == false) {
-//     SerialMon.println(" fail");
-//     return false;
-//   }
-//   SerialMon.println(" success");
-//   mqtt.publish(topicInit, "GsmClientTest started");
-//   mqtt.subscribe(topicLed);
-//   return mqtt.connected();
-// }
-Datos datos(19,18,1,23,22);
 void setup() {
   // Set console baud rate
   SerialMon.begin(115200);

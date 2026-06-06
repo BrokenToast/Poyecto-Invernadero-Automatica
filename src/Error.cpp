@@ -1,6 +1,6 @@
 #include "Error.h"
 
-Error::Error(int tx,int rx, int baud_rate){
+Error::Error(){
     this->serie_error.begin(baud_rate,EspSoftwareSerial::SWSERIAL_8N1,rx,tx);
 }
 
