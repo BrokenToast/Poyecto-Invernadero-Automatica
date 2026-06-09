@@ -3,6 +3,7 @@
 #endif
 #include "SensorSuelo.h"
 #include "DHT.h"
+#include "HardwareSerial.h"
 class Datos{
     private:
     int nitrogeno;
@@ -13,8 +14,8 @@ class Datos{
     int humedad_interna;
     int humedad_externa;
     float humedad_suelo;
-    int temperatura_interna;
-    int temperatura_externa;
+    float temperatura_interna;
+    float temperatura_externa;
     float temperatura_suelo;
 
     DHT datos_DTH_interno;
@@ -110,5 +111,11 @@ class Datos{
      * 
      */
     void obtenerDatosSuelo();
+    /**
+     * @brief Nos permite parar la ejecución por un tiempo determinado
+     * 
+     * @param tiempo 
+     */
+    void delay(int tiempo);
 };
 

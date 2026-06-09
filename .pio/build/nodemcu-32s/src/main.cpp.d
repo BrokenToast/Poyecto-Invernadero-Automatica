@@ -133,10 +133,10 @@
  /home/toast/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_hw_support/include/soc/esp32/spiram.h \
  /home/toast/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  /home/toast/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
- lib/SensorSuelo/src/SensorSuelo.h \
+ src/Datos.h lib/SensorSuelo/src/SensorSuelo.h \
  /home/toast/.platformio/packages/framework-arduinoespressif32/cores/esp32/HardwareSerial.h \
- src/Datos.h .pio/libdeps/nodemcu-32s/DHT\ sensor\ library/DHT.h \
- .pio/libdeps/nodemcu-32s/TinyGSM/src/TinyGsmClient.h \
+ .pio/libdeps/nodemcu-32s/DHT\ sensor\ library/DHT.h src/Actuaciones.h \
+ src/Parametros.h .pio/libdeps/nodemcu-32s/TinyGSM/src/TinyGsmClient.h \
  .pio/libdeps/nodemcu-32s/TinyGSM/src/TinyGsmClientSIM800.h \
  .pio/libdeps/nodemcu-32s/TinyGSM/src/TinyGsmModem.tpp \
  .pio/libdeps/nodemcu-32s/TinyGSM/src/TinyGsmCommon.h \

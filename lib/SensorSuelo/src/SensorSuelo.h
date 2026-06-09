@@ -1,8 +1,7 @@
 // math_operations.h
-#ifndef SENSORSUELO_H
-#define SENSORSUELO_H
-
-#include <Arduino.h>
+#ifndef SensorSuelo_H
+#define SensorSuelo_H
+#endif
 #include "HardwareSerial.h"
 
 /**
@@ -11,11 +10,11 @@
  */
 class SensorSuelo
 {
-private:
-  uint8_t id_sensor;
+public:
+  int id_sensor;
   
-  const uint8_t leer=0x03;
-  const uint8_t escribir=0x03;
+  const int leer=0x03;
+  const int escribir=0x03;
 
   HardwareSerial sensor;
 
@@ -28,7 +27,7 @@ private:
    * @param direccion_fin_bajo 
    * @return int 
    */
-  int getDato(uint8_t direccion_inicio_alto,uint8_t direccion_inicio_bajo,uint8_t direccion_fin_alto,uint8_t direccion_fin_bajo);
+  int getDato(int direccion_inicio_alto,int direccion_inicio_bajo,int direccion_fin_alto,int direccion_fin_bajo);
 
   /**
    * @brief 
@@ -36,7 +35,7 @@ private:
    * @param datos 
    * @param longitud 
    */
-  void CRC16Modbus(uint8_t *datos,int longitud);
+  void CRC16Modbus(int *datos,int longitud);
 
   /**
    * @brief 
@@ -44,9 +43,7 @@ private:
    * @param milis 
    */
   void delaySensor(unsigned long ms);
-public:
-  SensorSuelo(uint8_t id_sensor, int rx_port, int tx_port);
-  ~SensorSuelo();
+  SensorSuelo(int id_sensor, int rx_port, int tx_port);
   float getHumedad();
   float getTemperatura();
   int getConductividad();
@@ -57,4 +54,3 @@ public:
   int getSalinidad();
   int getTDS();
 };
-#endif

@@ -1,5 +1,4 @@
 #include"Datos.h"
-
 /**
  * @brief 
  * 
@@ -94,18 +93,31 @@ float Datos::getHumedadSuelo(){
  * @return int 
  */
 void Datos::obtenerDatosSuelo(){
+    
     this->nitrogeno=this->sensor_suelo.getNitrogeno();
+    this->delay(100);
     this->potasio=this->sensor_suelo.getPotasio();
+    this->delay(100);
     this->fosforo=this->sensor_suelo.getFosforo();
+    this->delay(100);
     this->ph=this->sensor_suelo.getPh();
+    this->delay(100);
     this->salinidad=this->sensor_suelo.getSalinidad();
+    this->delay(100);
     this->temperatura_suelo=this->sensor_suelo.getTemperatura();
+    this->delay(100);
     this->humedad_suelo=this->sensor_suelo.getHumedad();
+    this->delay(100);
 
     this->datos_DTH_externo.begin();
     this->datos_DTH_interno.begin();
     this->humedad_interna=this->datos_DTH_interno.readHumidity();
-    this->humedad_externa;this->datos_DTH_externo.readHumidity();
+    this->humedad_externa=this->datos_DTH_externo.readHumidity();
     this->temperatura_interna=this->datos_DTH_interno.readTemperature();
     this->temperatura_externa=this->datos_DTH_externo.readTemperature();
+}
+
+void Datos::delay(int tiempo){
+    int tiempo_final=millis()+tiempo+1;
+    while (tiempo_final>millis()){}
 }

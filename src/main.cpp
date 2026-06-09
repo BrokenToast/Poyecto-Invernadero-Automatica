@@ -1,119 +1,108 @@
 #include <Arduino.h>
-#include "SensorSuelo.h"
 #include "Datos.h"
+#include "Actuaciones.h"
+#include "Parametros.h"
 
-// Select your modem:
-#define TINY_GSM_MODEM_SIM800
-
-
-// Define the serial console for debug prints, if needed
-//#define TINY_GSM_DEBUG SerialMon
-
-// Range to attempt to autobaud
-// NOTE:  DO NOT AUTOBAUD in production code.  Once you've established
-// communication, set a fixed baud rate using modem.setBaud(#).
-#define GSM_AUTOBAUD_MIN 9600
-#define GSM_AUTOBAUD_MAX 115200
-
-// set GSM PIN, if any
-#define GSM_PIN "0276"
-
-// Your GPRS credentials, if any
-const char apn[]      = "airtelwap.es";
-const char gprsUser[] = "";
-const char gprsPass[] = "";
-
-// MQTT details
-const char* broker = "luispatb.es";
-const char* mqtt_user = "";
-const char* mqtt_pass = "";
-
-// Variables globales
-const char* topic_potasio = "invernadero/potasio";
-int valor_potasio;
-
-const char* topic_fosforo = "invernadero/potasio";
-int valor_fosforo;
-
-const char* topic_nitrogeno = "invernadero/nitrogeno";
-int valor_nitrogeno;
-
-const char* topic_ph = "invernadero/ph";
-int valor_ph;
-
-const char* topic_temperatura_in= "invernadero/temperaturain";
-int valor_temperatura_in;
-
-const char* topic_temperatura_ex = "invernadero/temperaturaex";
-int valor_temperatura_ex;
-
-const char* topic_humedad_in= "invernadero/humedadin";
-int valor_humedad_in;
-
-const char* topic_humedad_ex = "invernadero/humedadex";
-int valor_humedad_ex;
-
-const char* info;
 
 #include <TinyGsmClient.h>
 #include <PubSubClient.h>
 
-TinyGsm        modem;
+TinyGsm        modem(SerialAT);
 TinyGsmClient client(modem);
 PubSubClient  mqtt(client);
 
-int ledStatus = LOW;
+/**
+ * @brief Funcion que nos permite conectarnos al MQTT
+ * 
+ * @return boolean 
+ */
+boolean mqttConnect() {
+  SerialMon.print("Connecting to ");
+  SerialMon.print(broker);
 
-uint32_t lastReconnectAttempt = 0;
-
-// void mqttCallback(char* topic, byte* payload, unsigned int len) {
-//   SerialMon.print("Message arrived [");
-//   SerialMon.print(topic);
-//   SerialMon.print("]: ");
-//   SerialMon.write(payload, len);
-//   SerialMon.println();
-
-//   // Only proceed if incoming message's topic matches
-//   if (String(topic) == topicLed) {
-//     ledStatus = !ledStatus;
-//     digitalWrite(LED_PIN, ledStatus);
-//     mqtt.publish(topicLedStatus, ledStatus ? "1" : "0");
-//   }
-// }
-
-boolean mqttConnect() {:
-  boolean status = mqtt.connect("GsmClientName", "mqtt_user", "mqtt_pass");
+  // Or, if you want to authenticate MQTT:
+  boolean status = mqtt.connect("esp32", mqtt_user, mqtt_pass);
+  
+  if (!status)
+  {
+    Serial.println("Error al conectar al mqtt");
+  }else{
+    Serial.println("Conectado al mqtt");
+  }
+  
 
   return mqtt.connected();
 }
-
-int mandarMQTT(char* topic, char* valor){
-  if (!mqtt.connected()){
-    for (int i = 0; i < 4; i++)
-    {
-      if (!mqttConnect())
-      {
-        // Error error al conectar a mqtt
-        break;
-      }
-    }
-    return mqtt.publish(topic, valor);
-  }
+/**
+ * @brief Nos permite enviar datos al servidor mqtt
+ * 
+ * @param topic 
+ * @param datos 
+ */
+void mqttEnviar(const char* topic, String datos) {
+  Serial.println(datos);
+  char caracteres[30];
+  datos.toCharArray(caracteres,15);
+  Serial.println(caracteres);
+  mqtt.publish(topic, caracteres);
 }
 
+/**
+ * @brief Nos permite enviar un error al mqtt
+ * 
+ * @param error 
+ */
+void mqttError(const char* topic, String error) {
+  char* caracteres;
+  error.toCharArray(caracteres,15);
+  mqtt.publish("invernadero/error",caracteres);
+}
+
+//Datos datos(18,19,1,22,23);
+Datos datos(
+  PIN_RX_SENSOR_SUELO,
+  PIN_TX_SENSOR_SUELO,
+  ID_SENSOR_SUELO,
+  PIN_DATA_AM2301A_INTERNA,
+  PIN_DATA_AM2301A_EXTERNA
+);
+//Actucaciones actuadores(32,33,25,26,14,12,21);
+Actucaciones actuadores(
+  PIN_STEP_VENTANA1,
+  PIN_DIR_VENTANA1,
+  PIN_STEP_VENTANA2,
+  PIN_DIR_VENTANA2,
+  PIN_STEP_PERISTALTICA,
+  PIN_DIR_PERISTALTICA,
+  PIN_BOMBA_AGUA
+);
+/**
+ * @brief Función que nos permite actializar los datos y subir directamente al servidor mqtt
+ * 
+ */
+void actualizarDatos(){
+  datos.obtenerDatosSuelo();
+  mqttEnviar("invernadero/nitrogeno",String(datos.getNitrogeno()));
+  mqttEnviar("invernadero/potasio",String(datos.getPotasio()));
+  mqttEnviar("invernadero/fosforo",String(datos.getFosforo()));
+  mqttEnviar("invernadero/ph",String(datos.getPh()));
+  mqttEnviar("invernadero/temperaturasuelo",String(datos.getTemperaturaSuelo()));
+  mqttEnviar("invernadero/humedadsuelo",String(datos.getHumedadSuelo()));
+  mqttEnviar("invernadero/temperaturain",String(datos.getTemperaturaInterna()));
+  mqttEnviar("invernadero/humedadin",String(datos.getHumedadInterna()));
+  mqttEnviar("invernadero/temperaturaex",String(datos.getTemperaturaExterna()));
+  mqttEnviar("invernadero/humedadex",String(datos.getHumedadExterna()));
+}
 void setup() {
   // Set console baud rate
   SerialMon.begin(115200);
   delay(10);
-
-  pinMode(LED_BUILTIN, OUTPUT);
-
+  Serial.println("Espere");
   // Set GSM module baud rate
   TinyGsmAutoBaud(SerialAT, GSM_AUTOBAUD_MIN, GSM_AUTOBAUD_MAX);
-  // SerialAT.begin(9600);
   delay(6000);
 
-  // Restart takes quite some time
+    // Restart takes quite some time
   // To skip it, call init() instead of restart()
   modem.restart();
   // modem.init();
@@ -121,71 +110,72 @@ void setup() {
   if (GSM_PIN && modem.getSimStatus() != 3) { modem.simUnlock(GSM_PIN); }
 
   if (!modem.waitForNetwork()) {
-    info="Error al conectar a la red";
+    Serial.println("Error al conectar a la red");
     delay(10000);
     return;
   }
+
   SerialMon.println(" success");
+  delay(5000);
 
   if (modem.isNetworkConnected()) { SerialMon.println("Network connected"); }
 
   // GPRS connection parameters are usually set after network registration
   SerialMon.print(F("Connecting to "));
   SerialMon.print(apn);
-  if (!modem.gprsConnect(apn, gprsUser, gprsPass)) {
-    SerialMon.println(" fail");
-    delay(10000);
-    return;
+  for (int i = 0; i < 3; i++)
+  {
+    if (!modem.gprsConnect(apn, gprsUser, gprsPass)) {
+      SerialMon.println(" fail");
+      delay(10000);
+    }else{
+      SerialMon.println(" success");
+      break;
+    }
   }
-  SerialMon.println(" success");
 
-  if (modem.isGprsConnected()) { SerialMon.println("GPRS connected"); }
+  if (modem.isGprsConnected()) { 
+    SerialMon.println("GPRS connected");
+  }
+
+  Serial.println(modem.getLocalIP());
 
   // MQTT Broker setup
-  //mqtt.setServer(broker, 1883);
-  //mqtt.setCallback(mqttCallback);
+  mqtt.setServer(broker, port);
+
+  mqttConnect();
 }
 
 void loop() {
-  Serial.printf("Temperaturas suelo %d Cº \n",datos.getTemperaturaSuelo());
-  // Make sure we're still registered on the network
-//   if (!modem.isNetworkConnected()) {
-//     SerialMon.println("Network disconnected");
-//     if (!modem.waitForNetwork(180000L, true)) {
-//       SerialMon.println(" fail");
-//       delay(10000);
-//       return;
-//     }
-//     if (modem.isNetworkConnected()) {
-//       SerialMon.println("Network re-connected");
-//     }
+  Serial.println("llegue");
+  actualizarDatos();
 
-//     // and make sure GPRS/EPS is still connected
-//     if (!modem.isGprsConnected()) {
-//       SerialMon.println("GPRS disconnected!");
-//       SerialMon.print(F("Connecting to "));
-//       SerialMon.print(apn);
-//       if (!modem.gprsConnect(apn, gprsUser, gprsPass)) {
-//         SerialMon.println(" fail");
-//         delay(10000);
-//         return;
-//       }
-//       if (modem.isGprsConnected()) { SerialMon.println("GPRS reconnected"); }
-//     }
-//   }
+  // if (datos.getHumedadSuelo()<MINIMA_HUMEDAD_SUELO)
+  // {
+  //   actuadores.riego(10000);
+  //   actualizarDatos();
+  // }
 
-//   if (!mqtt.connected()) {
-//     SerialMon.println("=== MQTT NOT CONNECTED ===");
-//     // Reconnect every 10 seconds
-//     uint32_t t = millis();
-//     if (t - lastReconnectAttempt > 10000L) {
-//       lastReconnectAttempt = t;
-//       if (mqttConnect()) { lastReconnectAttempt = 0; }
-//     }
-//     delay(100);
-//     return;
-//   }
+  // if (datos.getNitrogeno()<MINIMO_NITROGENO);
+  // {
+  //   actuadores.dosificacionNutrientes(40);
+  //   actualizarDatos();
+  // }
+  // int temeperatura_interna=datos.getTemperaturaInterna();
 
-//   mqtt.loop();
+  // if (temeperatura_interna > RANGO_TEMPERATURA_INTERNA_1 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_2)
+  // {
+  //   actuadores.abrirVentanas(25);
+  // }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_2 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_3){
+  //   actuadores.abrirVentanas(50);
+  // }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_3 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_4){
+  //   actuadores.abrirVentanas(75);
+  // }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_4){
+  //   actuadores.abrirVentanas(100);
+  // }else{
+  //   actuadores.cerrarVentanas();
+  // }
+
+  mqtt.loop();
   delay(1000);
 }
