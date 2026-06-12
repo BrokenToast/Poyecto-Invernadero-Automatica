@@ -10,14 +10,23 @@
  * @param pin_dire_peristaltica 
  * @param pin_motor_agua 
  */
-Actucaciones::Actucaciones(int pin_step_ventana1,int pin_dire_ventana1,int pin_step_ventana2,int pin_dire_ventana2,int pin_step_peristaltica,int pin_dire_peristaltica,int pin_motor_agua){
-   pinMode(pin_dire_ventana1,OUTPUT);
-   pinMode(pin_step_ventana1,OUTPUT);
-   pinMode(pin_dire_ventana2,OUTPUT);
-   pinMode(pin_step_ventana2,OUTPUT);
-   pinMode(pin_dire_peristaltica,OUTPUT);
-   pinMode(pin_step_peristaltica,OUTPUT); 
-   pinMode(pin_motor_agua,OUTPUT);
+Actucaciones::Actucaciones(int pin_step_ventana1,int pin_dire_ventana1,int pin_step_ventana2,int pin_dire_ventana2,int pin_step_peristaltica,int pin_dire_peristaltica,int pin_motor_agua,int cantidad_pasos_ventana){
+    this->pin_step_ventana1=pin_step_ventana1;
+    this->pin_dire_ventana1=pin_dire_ventana1;
+    this->pin_step_ventana2=pin_step_ventana2;
+    this->pin_dire_ventana2=pin_dire_ventana2;
+    this->pin_step_peristaltica=pin_step_peristaltica;
+    this->pin_dire_peristaltica=pin_dire_peristaltica;
+    this->pin_motor_agua=pin_motor_agua;
+    this->cantidad_pasos_ventana=cantidad_pasos_ventana;
+    pinMode(pin_dire_ventana1,OUTPUT);
+    pinMode(pin_step_ventana1,OUTPUT);
+    pinMode(pin_dire_ventana2,OUTPUT);
+    pinMode(pin_step_ventana2,OUTPUT);
+    pinMode(pin_dire_peristaltica,OUTPUT);
+    pinMode(pin_step_peristaltica,OUTPUT); 
+    pinMode(pin_motor_agua,OUTPUT);
+    this->cantidad_pasos_ventana=cantidad_pasos_ventana;
 }
 /**
  * @brief Esta función nos permite mover x cantidad de pasos un motor paso a paso.
@@ -31,9 +40,9 @@ void Actucaciones::moverPasos(int pin_step,int pin_dire,int cantidad,int direcci
     for (int i = 0; i < cantidad; i++)
     {
         digitalWrite(pin_step,0);
-        delayActuaciones(1);
+        delay(4);
         digitalWrite(pin_step,1);
-        delayActuaciones(1);
+        delay(4);
     }
 }
 /**
@@ -51,11 +60,21 @@ int* Actucaciones::dosificacionNutrientes(int cantidad){
     while (millis()<tiempo_final)
     {
         digitalWrite(this->pin_step_peristaltica,0);
-        delayActuaciones(1);
+        delay(1);
         digitalWrite(this->pin_step_peristaltica,1);
-        delayActuaciones(1);
+        delay(1);
     }
     
+}
+/**
+ * @brief Nos permite abrir las ventana.
+ * 
+ * @param porcentajes Porcentaje de la ventana abierta.
+ */
+void Actucaciones::abrirVentanas(int porcentaje){
+    int cantidad_pasos=(porcentaje*this->cantidad_pasos_ventana)/100;
+    Serial.println(cantidad_pasos);
+    this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,cantidad_pasos,1);
 }
 /**
  * @brief Metodo que nos permite activar el riego por un determinado tiempo
@@ -68,26 +87,9 @@ void Actucaciones::riego(int tiempo){
     digitalWrite(this->pin_motor_agua,0);
 }
 /**
- * @brief Nos permite abrir las ventana.
- * 
- * @param porcentajes Porcentaje de la ventana abierta.
- */
-void Actucaciones::abrirVentanas(int porcentaje){
-    int cantidad_pasos=(porcentaje*PASO_VENTANA_100)/100;
-    this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,cantidad_pasos,1);
-}
-
-/**
  * @brief Nos permite cerrar las ventanas.
  * 
  * @param porcentajes Porcentaje de la ventana abierta.
  */
 void Actucaciones::cerrarVentanas(){
-    
-}
-
-void Actucaciones::delayActuaciones(int tiempo){
-    int tiempo_fin=tiempo+millis();
-    
-    while (millis()<tiempo_fin){}
 }

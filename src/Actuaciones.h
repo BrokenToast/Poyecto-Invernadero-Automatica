@@ -2,7 +2,6 @@
 #define Actucaciones_h
 #endif
 #include "Arduino.h"
-#include "Parametros.h"
 class Actucaciones{
     private:
         int pin_step_ventana1;
@@ -12,6 +11,7 @@ class Actucaciones{
         int pin_step_peristaltica;
         int pin_dire_peristaltica;
         int pin_motor_agua;
+        int cantidad_pasos_ventana;
 
         /**
          * @brief Esta variable nos indica cuanto esta abierta la ventana
@@ -25,7 +25,6 @@ class Actucaciones{
          * @param direccion  
          */
         void moverPasos(int pin_step,int pin_dire,int cantidad,int direccion);
-        void delayActuaciones(int tiempo);
     public:
         /**
          * @brief Construct a new Actucaciones object
@@ -37,8 +36,16 @@ class Actucaciones{
          * @param pin_step_peristaltica 
          * @param pin_dire_peristaltica 
          * @param pin_motor_agua 
+         * @param cantidad_pasos_ventana
          */
-        Actucaciones(int pin_step_ventana1,int pin_dire_ventana1,int pin_step_ventana2,int pin_dire_ventana2,int pin_step_peristaltica,int pin_dire_peristaltica,int pin_motor_agua);
+        Actucaciones(int pin_step_ventana1,
+            int pin_dire_ventana1,
+            int pin_step_ventana2,
+            int pin_dire_ventana2,
+            int pin_step_peristaltica,
+            int pin_dire_peristaltica,
+            int pin_motor_agua,
+            int cantidad_pasos_ventana);
         /**
          * @brief Nos permite dosificar nutrientes a la planta
          * 

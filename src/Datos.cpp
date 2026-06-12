@@ -110,11 +110,11 @@ void Datos::obtenerDatosSuelo(){
     this->delay(100);
 
     this->datos_DTH_externo.begin();
+     this->temperatura_externa=this->datos_DTH_externo.readTemperature();
+    this->humedad_externa=this->datos_DTH_externo.readHumidity();
     this->datos_DTH_interno.begin();
     this->humedad_interna=this->datos_DTH_interno.readHumidity();
-    this->humedad_externa=this->datos_DTH_externo.readHumidity();
     this->temperatura_interna=this->datos_DTH_interno.readTemperature();
-    this->temperatura_externa=this->datos_DTH_externo.readTemperature();
 }
 
 void Datos::delay(int tiempo){

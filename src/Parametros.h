@@ -42,13 +42,13 @@ const char* mqtt_pass = "paso1234";
 //                                                        //
 ////////////////////////////////////////////////////////////
 
-#define PIN_DIR_VENTANA1 32
-#define PIN_STEP_VENTANA1 34
-#define PIN_DIR_VENTANA2 26
-#define PIN_STEP_VENTANA2 25
-#define PIN_DIR_PERISTALTICA 12
-#define PIN_STEP_PERISTALTICA 14
-#define PIN_BOMBA_AGUA 4
+#define PIN_DIR_VENTANA1 33
+#define PIN_STEP_VENTANA1 32
+#define PIN_DIR_VENTANA2 12
+#define PIN_STEP_VENTANA2 14
+#define PIN_DIR_PERISTALTICA 25
+#define PIN_STEP_PERISTALTICA 26
+#define PIN_BOMBA_AGUA 5
 #define PIN_DATA_AM2301A_INTERNA 22
 #define PIN_DATA_AM2301A_EXTERNA 21
 #define PIN_TX_SENSOR_SUELO 19
@@ -70,3 +70,5 @@ const char* mqtt_pass = "paso1234";
 #define MINIMO_POTASIO 40
 #define MINIMO_FOSFORO 40
 #define PASO_VENTANA_100 850
+#define DIRECCION_VENTANA1 1
+#define DIRECCION_VENTANA2
