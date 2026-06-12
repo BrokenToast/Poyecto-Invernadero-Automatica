@@ -72,9 +72,9 @@ void Actucaciones::riego(int tiempo){
  * 
  * @param porcentajes Porcentaje de la ventana abierta.
  */
-void Actucaciones::abrirVentanas(int porcentajes){
-    this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,500,1);
-    this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,500,1);
+void Actucaciones::abrirVentanas(int porcentaje){
+    int cantidad_pasos=(porcentaje*PASO_VENTANA_100)/100;
+    this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,cantidad_pasos,1);
 }
 
 /**

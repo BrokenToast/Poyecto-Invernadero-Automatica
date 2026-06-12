@@ -69,3 +69,4 @@ const char* mqtt_pass = "paso1234";
 #define MINIMO_NITROGENO 100
 #define MINIMO_POTASIO 40
 #define MINIMO_FOSFORO 40
+#define PASO_VENTANA_100 850

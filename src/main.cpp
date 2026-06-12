@@ -19,6 +19,7 @@ PubSubClient  mqtt(client);
 boolean mqttConnect() {
   SerialMon.print("Connecting to ");
   SerialMon.print(broker);
+  pantallaInfo("Conectando al MQTT");
 
   // Or, if you want to authenticate MQTT:
   boolean status = mqtt.connect("esp32", mqtt_user, mqtt_pass);
@@ -26,8 +27,10 @@ boolean mqttConnect() {
   if (!status)
   {
     Serial.println("Error al conectar al mqtt");
+    pantallaInfo("Error mqtt");
   }else{
     Serial.println("Conectado al mqtt");
+    pantallaInfo("Conectado al mqtt");
   }
   
 
@@ -43,7 +46,6 @@ void mqttEnviar(const char* topic, String datos) {
   Serial.println(datos);
   char caracteres[30];
   datos.toCharArray(caracteres,15);
-  Serial.println(caracteres);
   mqtt.publish(topic, caracteres);
 }
 
@@ -57,7 +59,35 @@ void mqttError(const char* topic, String error) {
   error.toCharArray(caracteres,15);
   mqtt.publish("invernadero/error",caracteres);
 }
-
+/**
+ * @brief Metodo que nos permite enviar datos a la pantalla
+ * 
+ * @param datos 
+ */
+void pantallaDatos(Datos datos){
+  Serial.printf("%i,%i,%i,%d,%i,%i,%i,%f,%f,0",
+    datos.getNitrogeno(),
+    datos.getFosforo(),
+    datos.getFosforo(),
+    datos.getHumedadSuelo(),
+    datos.getPh(),
+    datos.getSalinidad(),
+    datos.getHumedadInterna(),
+    datos.getHumedadExterna(),
+    datos.getTemperaturaInterna(),
+    datos.getTemperaturaExterna()
+  );
+}
+/**
+ * @brief Metodos que nos permite enviar un error a la pantalla
+ * 
+ * @param error 
+ */
+void pantallaInfo(String info){
+  Serial.printf("0,0,0,0,0,0,0,0,0,%s",
+    info
+  );
+}
 //Datos datos(18,19,1,22,23);
 Datos datos(
   PIN_RX_SENSOR_SUELO,
@@ -97,25 +127,26 @@ void setup() {
   // Set console baud rate
   SerialMon.begin(115200);
   delay(10);
-  Serial.println("Espere");
+  //Serial.println("Espere");
+  pantallaInfo("Espere");
   // Set GSM module baud rate
   TinyGsmAutoBaud(SerialAT, GSM_AUTOBAUD_MIN, GSM_AUTOBAUD_MAX);
   delay(6000);
 
-    // Restart takes quite some time
   // To skip it, call init() instead of restart()
   modem.restart();
-  // modem.init();
 
   if (GSM_PIN && modem.getSimStatus() != 3) { modem.simUnlock(GSM_PIN); }
 
   if (!modem.waitForNetwork()) {
-    Serial.println("Error al conectar a la red");
+    //Serial.println("Error al conectar a la red");
+    pantallaInfo("Error red");
     delay(10000);
     return;
   }
 
   SerialMon.println(" success");
+  pantallaInfo("Conectado a la red");
   delay(5000);
 
   if (modem.isNetworkConnected()) { SerialMon.println("Network connected"); }
@@ -123,19 +154,23 @@ void setup() {
   // GPRS connection parameters are usually set after network registration
   SerialMon.print(F("Connecting to "));
   SerialMon.print(apn);
+  pantallaInfo("Conectando al APN");
   for (int i = 0; i < 3; i++)
   {
     if (!modem.gprsConnect(apn, gprsUser, gprsPass)) {
       SerialMon.println(" fail");
+      pantallaInfo("Error APN");
       delay(10000);
     }else{
       SerialMon.println(" success");
+      pantallaInfo("Conectado al APN");
       break;
     }
   }
 
   if (modem.isGprsConnected()) { 
     SerialMon.println("GPRS connected");
+    pantallaInfo("GPRS conectado");
   }
 
   Serial.println(modem.getLocalIP());
@@ -147,7 +182,6 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("llegue");
   actualizarDatos();
 
   // if (datos.getHumedadSuelo()<MINIMA_HUMEDAD_SUELO)

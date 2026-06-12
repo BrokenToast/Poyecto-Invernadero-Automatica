@@ -2,6 +2,7 @@
 #define Actucaciones_h
 #endif
 #include "Arduino.h"
+#include "Parametros.h"
 class Actucaciones{
     private:
         int pin_step_ventana1;
