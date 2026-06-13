@@ -17,22 +17,21 @@ PubSubClient  mqtt(client);
  * @return boolean 
  */
 boolean mqttConnect() {
-  //SerialMon.print("Connecting to ");
-  //SerialMon.print(broker);
-  //pantallaInfo("Conectando al MQTT");
+  #ifdef SerialMon
+    SerialMon.print("Connecting to ");
+    SerialMon.print(broker);
+  #endif
 
   // Or, if you want to authenticate MQTT:
   boolean status = mqtt.connect("esp32", mqtt_user, mqtt_pass);
-  
-  if (!status)
-  {
-    //Serial.println("Error al conectar al mqtt");
-    //pantallaInfo("Error mqtt");
-  }else{
-    //Serial.println("Conectado al mqtt");
-    //pantallaInfo("Conectado al mqtt");
-  }
-  
+  #ifdef SerialMon
+    if (!status)
+    {
+      Serial.println("Error al conectar al mqtt");
+    }else{
+      Serial.println("Conectado al mqtt");
+    }
+  #endif
 
   return mqtt.connected();
 }
@@ -43,7 +42,6 @@ boolean mqttConnect() {
  * @param datos 
  */
 void mqttEnviar(const char* topic, String datos) {
-  //Serial.println(datos);
   char caracteres[30];
   datos.toCharArray(caracteres,15);
   mqtt.publish(topic, caracteres);
@@ -99,36 +97,39 @@ void actualizarDatos(){
   
   char valor[30];
   datos.obtenerDatosSuelo();
+  #ifdef SerialMon
+    Serial.println(datos.getNitrogeno());
+    Serial.println(datos.getPotasio());
+    Serial.println(datos.getFosforo());
+    Serial.println(datos.getPh());
+    Serial.println(datos.getTemperaturaSuelo());
+    Serial.println(datos.getHumedadSuelo());
+    Serial.println(datos.getTemperaturaInterna());
+    Serial.println(datos.getHumedadInterna());
+    Serial.println(datos.getTemperaturaExterna());
+    Serial.println(datos.getHumedadExterna());
+  #endif
+  
   if (datos.getHumedadSuelo()>50)
   {
-    //Serial.println(datos.getNitrogeno());
     sprintf(valor,"%i mg/kg",datos.getNitrogeno());
     mqttEnviar("invernadero/nitrogeno",valor);
-    //Serial.println(datos.getPotasio());
     sprintf(valor,"%i mg/kg",datos.getPotasio());
     mqttEnviar("invernadero/potasio",valor);
-    //Serial.println(datos.getFosforo());
     sprintf(valor,"%i mg/kg",datos.getFosforo());
     mqttEnviar("invernadero/fosforo",valor);
-    //Serial.println(datos.getPh());
     mqttEnviar("invernadero/ph",String(datos.getPh()));
   }
-  //Serial.println(datos.getTemperaturaSuelo());
   sprintf(valor,"%f ºC",datos.getTemperaturaSuelo());
   mqttEnviar("invernadero/temperaturasuelo",valor);
-  //Serial.println(datos.getHumedadSuelo());
   sprintf(valor,"%i \%",datos.getHumedadSuelo());
   mqttEnviar("invernadero/humedadsuelo",valor);
-  //Serial.println(datos.getTemperaturaInterna());
   sprintf(valor,"%i ºC",datos.getTemperaturaInterna());
   mqttEnviar("invernadero/temperaturain",valor);
-  //Serial.println(datos.getHumedadInterna());
   sprintf(valor,"%i \%",datos.getHumedadInterna());
   mqttEnviar("invernadero/humedadin",valor);
-  //Serial.println(datos.getTemperaturaExterna());
   sprintf(valor,"%i ºC",datos.getTemperaturaExterna());
   mqttEnviar("invernadero/temperaturaex",valor);
-  //Serial.println(datos.getHumedadExterna());
   sprintf(valor,"%i \%",datos.getHumedadExterna());
   mqttEnviar("invernadero/humedadex",valor);
   
@@ -151,8 +152,6 @@ void setup() {
   // Set console baud rate
   SerialMon.begin(115200);
   delay(10);
-  //Serial.println("Espere");
-  //pantallaInfo("Espere");
   // Set GSM module baud rate
   TinyGsmAutoBaud(SerialAT, GSM_AUTOBAUD_MIN, GSM_AUTOBAUD_MAX);
   delay(6000);
@@ -163,39 +162,37 @@ void setup() {
   if (GSM_PIN && modem.getSimStatus() != 3) { modem.simUnlock(GSM_PIN); }
 
   if (!modem.waitForNetwork()) {
-    //Serial.println("Error al conectar a la red");
-    //pantallaInfo("Error red");
-    delay(10000);
+    #ifdef SerialMon
+      Serial.println("Error al conectar a la red");
+    #endif
     return;
   }
 
-  //SerialMon.println(" success");
-  //pantallaInfo("Conectado a la red");
   delay(5000);
 
-  // if (modem.isNetworkConnected()) { SerialMon.println("Network connected"); }
-
+  #ifdef SerialMon
+    if (modem.isNetworkConnected()) { SerialMon.println("Network connected"); }
+  #endif
   // GPRS connection parameters are usually set after network registration
-  //SerialMon.print(F("Connecting to "));
-  //SerialMon.print(apn);
-  //pantallaInfo("Conectando al APN");
   for (int i = 0; i < 3; i++)
   {
     if (!modem.gprsConnect(apn, gprsUser, gprsPass)) {
-      //SerialMon.println(" fail");
-      //pantallaInfo("Error APN");
+      #ifdef SerialMon
+        SerialMon.println(" fail");
+      #endif
       delay(10000);
     }else{
-      //SerialMon.println(" success");
-      //pantallaInfo("Conectado al APN");
+      #ifdef SerialMon
+        SerialMon.println(" success");
+      #endif
       break;
     }
   }
-
-  if (modem.isGprsConnected()) { 
-    //SerialMon.println("GPRS connected");
-    //pantallaInfo("GPRS conectado");
-  }
+  #ifdef SerialMon
+    if (modem.isGprsConnected()) { 
+      SerialMon.println("GPRS connected");
+    }
+  #endif
 
   // MQTT Broker setup
   mqtt.setServer(broker, port);
