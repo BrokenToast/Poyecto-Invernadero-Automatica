@@ -40,9 +40,9 @@ void Actucaciones::moverPasos(int pin_step,int pin_dire,int cantidad,int direcci
     for (int i = 0; i < cantidad; i++)
     {
         digitalWrite(pin_step,0);
-        delay(4);
+        delay(1);
         digitalWrite(pin_step,1);
-        delay(4);
+        delay(2);
     }
 }
 /**
@@ -53,17 +53,8 @@ void Actucaciones::moverPasos(int pin_step,int pin_dire,int cantidad,int direcci
  */
 int* Actucaciones::dosificacionNutrientes(int cantidad){
     // 70 ml por minuto
-    int tiempo_final=millis()+(cantidad*60000)/70;
-    // Para que gire en sistendo horario;
     digitalWrite(this->pin_dire_peristaltica,1);
-
-    while (millis()<tiempo_final)
-    {
-        digitalWrite(this->pin_step_peristaltica,0);
-        delay(1);
-        digitalWrite(this->pin_step_peristaltica,1);
-        delay(1);
-    }
+    this->moverPasos(this->pin_step_peristaltica,this->pin_dire_peristaltica,10000,1);
     
 }
 /**
