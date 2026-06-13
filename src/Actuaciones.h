@@ -12,6 +12,7 @@ class Actucaciones{
         int pin_dire_peristaltica;
         int pin_motor_agua;
         int cantidad_pasos_ventana;
+        int cantidad_pasos_dados;
 
         /**
          * @brief Esta variable nos indica cuanto esta abierta la ventana

@@ -73,7 +73,7 @@ int* Actucaciones::dosificacionNutrientes(int cantidad){
  */
 void Actucaciones::abrirVentanas(int porcentaje){
     int cantidad_pasos=(porcentaje*this->cantidad_pasos_ventana)/100;
-    Serial.println(cantidad_pasos);
+    this->cantidad_pasos_dados=cantidad_pasos;
     this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,cantidad_pasos,1);
 }
 /**
@@ -92,4 +92,5 @@ void Actucaciones::riego(int tiempo){
  * @param porcentajes Porcentaje de la ventana abierta.
  */
 void Actucaciones::cerrarVentanas(){
+        this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,this->cantidad_pasos_dados,0);
 }
