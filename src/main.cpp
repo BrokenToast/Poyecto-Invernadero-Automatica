@@ -122,7 +122,7 @@ void actualizarDatos(){
   }
   sprintf(valor,"%f ºC",datos.getTemperaturaSuelo());
   mqttEnviar("invernadero/temperaturasuelo",valor);
-  sprintf(valor,"%i \%",datos.getHumedadSuelo());
+  sprintf(valor,"%f \%",datos.getHumedadSuelo());
   mqttEnviar("invernadero/humedadsuelo",valor);
   sprintf(valor,"%i ºC",datos.getTemperaturaInterna());
   mqttEnviar("invernadero/temperaturain",valor);
@@ -202,31 +202,33 @@ void setup() {
 
 void loop() {
   actualizarDatos();
+  actuadores.abrirVentanas(100);
+  delay(2000);
+  actuadores.cerrarVentanas();
+  // if(datos.getHumedadSuelo()<50){
+  //   actuadores.riego(6000);
+  //   actualizarDatos();
+  // }
 
-  if(datos.getHumedadSuelo()<50){
-    actuadores.riego(6000);
-    actualizarDatos();
-  }
+  // if (datos.getNitrogeno()<MINIMO_NITROGENO && datos.getHumedadSuelo()>50);
+  // {
+  //   actuadores.dosificacionNutrientes(20);
+  //   actualizarDatos();
+  // }
+  // int temeperatura_interna=datos.getTemperaturaInterna();
 
-  if (datos.getNitrogeno()<MINIMO_NITROGENO && datos.getHumedadSuelo()>50);
-  {
-    actuadores.dosificacionNutrientes(20);
-    actualizarDatos();
-  }
-  int temeperatura_interna=datos.getTemperaturaInterna();
-
-  if (temeperatura_interna > RANGO_TEMPERATURA_INTERNA_1 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_2)
-  {
-    actuadores.abrirVentanas(25);
-  }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_2 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_3){
-    actuadores.abrirVentanas(50);
-  }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_3 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_4){
-    actuadores.abrirVentanas(75);
-  }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_4){
-    actuadores.abrirVentanas(100);
-  }else{
-    actuadores.cerrarVentanas();
-  }
+  // if (temeperatura_interna > RANGO_TEMPERATURA_INTERNA_1 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_2)
+  // {
+  //   actuadores.abrirVentanas(25);
+  // }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_2 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_3){
+  //   actuadores.abrirVentanas(50);
+  // }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_3 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_4){
+  //   actuadores.abrirVentanas(75);
+  // }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_4){
+  //   actuadores.abrirVentanas(100);
+  // }else{
+  //   actuadores.cerrarVentanas();
+  // }
 
   mqtt.loop();
   delay(1000);
