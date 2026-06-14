@@ -42,20 +42,19 @@ void Actucaciones::moverPasos(int pin_step,int pin_dire,int cantidad,int direcci
         digitalWrite(pin_step,0);
         delay(1);
         digitalWrite(pin_step,1);
-        delay(2);
+        delay(1);
     }
 }
 /**
  * @brief Nos permite dosificar nutrientes a la planta
  * 
- * @param cantidad 
- * @return Devuelve la cantidad de nutrientes dosificador,0=nitrogeno,1=potasio,2=fosforo
+ * @param cantidad Cantidad de ml de nuetrientes
  */
 void Actucaciones::dosificacionNutrientes(int cantidad){
-    // 70 ml por minuto
+    // 70 ml por minuto 20000 pasos por minutos
+    int cantidad_pasos=(cantidad*20000)/70;
     digitalWrite(this->pin_dire_peristaltica,1);
-    this->moverPasos(this->pin_step_peristaltica,this->pin_dire_peristaltica,10000,1);
-    
+    this->moverPasos(this->pin_step_peristaltica,this->pin_dire_peristaltica,cantidad_pasos,1);
 }
 /**
  * @brief Nos permite abrir las ventana.
@@ -64,6 +63,7 @@ void Actucaciones::dosificacionNutrientes(int cantidad){
  */
 void Actucaciones::abrirVentanas(int porcentaje){
     int cantidad_pasos=(porcentaje*this->cantidad_pasos_ventana)/100;
+    cantidad_pasos-=this->cantidad_pasos_dados;
     this->cantidad_pasos_dados=cantidad_pasos;
     this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,cantidad_pasos,1);
 }

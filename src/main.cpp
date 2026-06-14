@@ -202,6 +202,7 @@ void setup() {
 
 void loop() {
   actualizarDatos();
+  
   if(datos.getHumedadSuelo()<50){
     actuadores.riego(6000);
     actualizarDatos();
@@ -212,6 +213,7 @@ void loop() {
       actualizarDatos();
     }
   }
+
   int temeperatura_interna=datos.getTemperaturaInterna();
 
   if (temeperatura_interna > RANGO_TEMPERATURA_INTERNA_1 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_2)
