@@ -83,5 +83,6 @@ void Actucaciones::riego(int tiempo){
  * @param porcentajes Porcentaje de la ventana abierta.
  */
 void Actucaciones::cerrarVentanas(){
-        this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,this->cantidad_pasos_dados,0);
+    this->moverPasos(this->pin_step_ventana1,this->pin_dire_ventana1,this->cantidad_pasos_dados,0);
+    this->cantidad_pasos_dados=0;
 }

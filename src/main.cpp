@@ -215,14 +215,14 @@ void setup() {
 
   int temeperatura_interna=datos.getTemperaturaInterna();
 
-  if (temeperatura_interna > RANGO_TEMPERATURA_INTERNA_1 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_2)
+  if (temeperatura_interna >= RANGO_TEMPERATURA_INTERNA_1 && temeperatura_interna <= RANGO_TEMPERATURA_INTERNA_2)
   {
     actuadores.abrirVentanas(25);
-  }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_2 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_3){
+  }else if(temeperatura_interna >= RANGO_TEMPERATURA_INTERNA_2 && temeperatura_interna <= RANGO_TEMPERATURA_INTERNA_3){
     actuadores.abrirVentanas(50);
-  }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_3 && temeperatura_interna < RANGO_TEMPERATURA_INTERNA_4){
+  }else if(temeperatura_interna >= RANGO_TEMPERATURA_INTERNA_3 && temeperatura_interna <= RANGO_TEMPERATURA_INTERNA_4){
     actuadores.abrirVentanas(75);
-  }else if(temeperatura_interna > RANGO_TEMPERATURA_INTERNA_4){
+  }else if(temeperatura_interna >= RANGO_TEMPERATURA_INTERNA_4){
     actuadores.abrirVentanas(100);
   }else{
     actuadores.cerrarVentanas();

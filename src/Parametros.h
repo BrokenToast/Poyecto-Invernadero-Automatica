@@ -9,7 +9,7 @@
 #define SerialMon Serial
 
 // Puerto de comunicación Serie para el modulo GSM
-#define SerialAT Serial2
+// #define SerialAT Serial2
 
 // Define the serial console for debug prints, if needed
 //#define TINY_GSM_DEBUG SerialMon
@@ -66,9 +66,9 @@ const char* mqtt_pass = "paso1234";
 #define RANGO_TEMPERATURA_INTERNA_2 26
 #define RANGO_TEMPERATURA_INTERNA_3 28
 #define RANGO_TEMPERATURA_INTERNA_4 30
-#define MINIMO_NITROGENO 100
+#define MINIMO_NITROGENO 10
 #define MINIMO_POTASIO 40
 #define MINIMO_FOSFORO 40
-#define PASO_VENTANA_100 850
+#define PASO_VENTANA_100 1000
 #define DIRECCION_VENTANA1 1
 #define DIRECCION_VENTANA2
