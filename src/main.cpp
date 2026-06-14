@@ -133,20 +133,20 @@ void actualizarDatos(){
   sprintf(valor,"%i \%",datos.getHumedadExterna());
   mqttEnviar("invernadero/humedadex",valor);
   
-  char caracteres[50];
-  sprintf(caracteres,"%i,%i,%i,%i,%i,%i,%i,%i,%i,1,0,",
-    datos.getNitrogeno(),
-    datos.getFosforo(),
-    datos.getFosforo(),
-    datos.getHumedadSuelo(),
-    datos.getPh(),
-    datos.getSalinidad(),
-    datos.getHumedadInterna(),
-    datos.getHumedadExterna(),
-    datos.getTemperaturaInterna(),
-    datos.getTemperaturaExterna()
-  );
-  Serial.println(caracteres);
+  // char caracteres[50];
+  // sprintf(caracteres,"%i,%i,%i,%i,%i,%i,%i,%i,%i,1,0,",
+  //   datos.getNitrogeno(),
+  //   datos.getFosforo(),
+  //   datos.getFosforo(),
+  //   datos.getHumedadSuelo(),
+  //   datos.getPh(),
+  //   datos.getSalinidad(),
+  //   datos.getHumedadInterna(),
+  //   datos.getHumedadExterna(),
+  //   datos.getTemperaturaInterna(),
+  //   datos.getTemperaturaExterna()
+  // );
+  // Serial.println(caracteres);
 }
 void setup() {
   // Set console baud rate
@@ -205,12 +205,12 @@ void loop() {
   if(datos.getHumedadSuelo()<50){
     actuadores.riego(6000);
     actualizarDatos();
-  }
 
-  if (datos.getNitrogeno()<MINIMO_NITROGENO && datos.getHumedadSuelo()>50);
-  {
-    actuadores.dosificacionNutrientes(20);
-    actualizarDatos();
+    if (datos.getNitrogeno()<MINIMO_NITROGENO);
+    {
+      actuadores.dosificacionNutrientes(20);
+      actualizarDatos();
+    }
   }
   int temeperatura_interna=datos.getTemperaturaInterna();
 

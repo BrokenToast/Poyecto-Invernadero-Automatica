@@ -51,7 +51,7 @@ void Actucaciones::moverPasos(int pin_step,int pin_dire,int cantidad,int direcci
  * @param cantidad 
  * @return Devuelve la cantidad de nutrientes dosificador,0=nitrogeno,1=potasio,2=fosforo
  */
-int* Actucaciones::dosificacionNutrientes(int cantidad){
+void Actucaciones::dosificacionNutrientes(int cantidad){
     // 70 ml por minuto
     digitalWrite(this->pin_dire_peristaltica,1);
     this->moverPasos(this->pin_step_peristaltica,this->pin_dire_peristaltica,10000,1);

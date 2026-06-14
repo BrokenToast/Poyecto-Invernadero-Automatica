@@ -53,7 +53,7 @@ class Actucaciones{
          * @param cantidad 
          * @return Devuelve la cantidad de nutrientes dosificador,0=nitrogeno,1=potasio,2=fosforo
          */
-        int* dosificacionNutrientes(int cantidad);
+        void dosificacionNutrientes(int cantidad);
         /**
          * @brief Metodo que nos permite activar el riego por un determinado tiempo
          * 
