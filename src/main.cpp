@@ -198,9 +198,8 @@ void setup() {
   mqtt.setServer(broker, port);
 
   mqttConnect();
-}
 
-void loop() {
+  // Codigo que se ejecuta en bucle
   actualizarDatos();
   
   if(datos.getHumedadSuelo()<50){
@@ -228,7 +227,42 @@ void loop() {
   }else{
     actuadores.cerrarVentanas();
   }
+}
 
+void loop() {
+  #ifdef SerialMon
+    while (SerialMon.available())
+    {
+      switch (Serial.read())
+      {
+      case 1:
+          actuadores.riego(5000);
+        break;
+      case 2:
+          actuadores.dosificacionNutrientes(40);
+        break;
+      case 3:
+          actuadores.abrirVentanas(100);
+        break;
+      case 4:
+          actuadores.cerrarVentanas();
+        /* code */
+        break;
+      default:
+          Serial.println("==================================");
+          Serial.println("=           Modo debug           =");
+          Serial.println("==================================");
+          Serial.println("=1:Activar bomba agua            =");
+          Serial.println("=2:Activar bomba peristaltica    =");
+          Serial.println("=3:Abrir por completo la ventana =");
+          Serial.println("=4:Cerrar por completo la ventana=");
+          Serial.println("==================================");
+        break;
+      }
+    }
+    
+  #endif
+  
   mqtt.loop();
-  delay(1000);
+  delay(5000);
 }
